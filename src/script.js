@@ -17,29 +17,56 @@ const fetchTeam = async () => {
       throw new Error(`Error status: ${res.status}`);
     }
     const data = await response.json();
-    console.log(data.results[0]);
-    populateGames(data.results[0]);
+    console.log(data.results);
+    populateGames(data.results);
   } catch (error) {
     console.error("Unable to fetch data:", error);
   }
 };
 
-const populateGames = (gameData) => {
-  $("#header-content img").attr(
-    "src",
-    "https://www.thesportsdb.com/images/media/team/badge/71545f1518464849.png"
-  );
-  $("#header-title").text(gameData.strHomeTeam);
-  $("#game-title").text(gameData.strEvent);
-  $("#date p").text(`${gameData.dateEvent} ${gameData.strTime} PM`);
-  $("#opponent p").text(gameData.strAwayTeam);
-  $("#home-score").text(gameData.intHomeScore);
-  $("#away-score").text(` - ${gameData.intAwayScore}`);
+const createGameBlock = (game) => {
+  const gameBlock = $("#nba-game").clone().show();
+  gameBlock.find("#game-title").text(game.strEvent);
+  gameBlock
+    .find("#date p")
+    .text(`${convertDateFormat(game.dateEvent)} ${game.strTime} PM`);
+  gameBlock.find("#opponent p").text(game.strAwayTeam);
+  gameBlock.find("#home-score").text(game.intHomeScore);
+  gameBlock.find("#away-score").text(` - ${game.intAwayScore}`);
 
-  if (gameData.intHomeScore < gameData.intAwayScore)
-    $("#home-score").css("color", "red");
-  else
-    $("#home-score").css("color", "green");
-}
+  // Set color for the home score
+  if (game.intHomeScore < game.intAwayScore)
+    gameBlock.find("#home-score").css("color", "red");
+  else gameBlock.find("#home-score").css("color", "green");
+
+  console.log(gameBlock);
+  return gameBlock;
+};
+
+const populateGames = (gameData) => {
+  $("#header-content img")
+    .attr("src", gameData[0].strHomeTeamBadge)
+    .attr("alt", `${gameData[0].strHomeTeam} logo`);
+  $("#header-title").text(gameData[0].strHomeTeam.toUpperCase());
+
+  $("title").text(`${gameData[0].strHomeTeam}'s Recent Game Summary`)
+
+  const parentContainer = $("#nba-last-games");
+
+  gameData.forEach((game) => {
+    const gameBlock = createGameBlock(game);
+    parentContainer.append(gameBlock);
+  });
+};
+
+const convertDateFormat = (dateString) => {
+  // Split the date string into components
+  const [year, month, day] = dateString.split(" ")[0].split("-");
+
+  // Convert to integers to remove leading zeros
+  const formattedDate = `${parseInt(month)}/${parseInt(day)}/${year}`;
+
+  return formattedDate;
+};
 
 fetchTeam();
