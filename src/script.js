@@ -24,8 +24,22 @@ const fetchTeam = async () => {
   }
 };
 
-const populateGames = () => {
-  
-};
+const populateGames = (gameData) => {
+  $("#header-content img").attr(
+    "src",
+    "https://www.thesportsdb.com/images/media/team/badge/71545f1518464849.png"
+  );
+  $("#header-title").text(gameData.strHomeTeam);
+  $("#game-title").text(gameData.strEvent);
+  $("#date p").text(`${gameData.dateEvent} ${gameData.strTime} PM`);
+  $("#opponent p").text(gameData.strAwayTeam);
+  $("#home-score").text(gameData.intHomeScore);
+  $("#away-score").text(` - ${gameData.intAwayScore}`);
+
+  if (gameData.intHomeScore < gameData.intAwayScore)
+    $("#home-score").css("color", "red");
+  else
+    $("#home-score").css("color", "green");
+}
 
 fetchTeam();
