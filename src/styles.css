@@ -80,4 +80,20 @@ header {
 #date p {
   font-style: italic;
 }
+
+#header-content {
+  display: flex;
+    align-items: center;
+}
+
+#header-badge {
+  width: 50px;
+}
+
+#header-title {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: red;
+  gap: 10px;
+  text-shadow: -2px 4px 9px rgba(0,0,0,0.34);
+}
 /* } */
