@@ -9,19 +9,23 @@
 // Goodluck!
 
 const fetchTeam = async () => {
-    try {
-      response = await fetch(
-        "https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t=Philadelphia_76ers"
-      );
-      if (!response.ok) {
-        throw new Error(`Error status: ${res.status}`);
-      }
-      const data = await response.json();
-      
-    } catch (error) {
-      console.error("Unable to fetch data:", error);
+  try {
+    response = await fetch(
+      "https://www.thesportsdb.com/api/v1/json/3/eventslast.php?id=134863"
+    );
+    if (!response.ok) {
+      throw new Error(`Error status: ${res.status}`);
     }
-  };
+    const data = await response.json();
+    console.log(data.results[0]);
+    populateGames(data.results[0]);
+  } catch (error) {
+    console.error("Unable to fetch data:", error);
+  }
+};
+
+const populateGames = () => {
   
-  fetchTeam();
-  
+};
+
+fetchTeam();
